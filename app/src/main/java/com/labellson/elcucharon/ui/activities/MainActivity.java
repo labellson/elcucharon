@@ -5,26 +5,12 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.labellson.elcucharon.R;
-import com.labellson.elcucharon.model.Restaurante;
-import com.labellson.elcucharon.rest.api.ElCucharonService;
 import com.labellson.elcucharon.ui.NavigationDrawerCallbacks;
-
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
-
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerCallbacks {
@@ -34,33 +20,10 @@ public class MainActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Toolbar mToolbar;
-    //private ElCucharonService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Inicializamos el servicio web
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .create();
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(getString(R.string.server_name)).setConverter(new GsonConverter(gson)).build();
-        ElCucharonService service = restAdapter.create(ElCucharonService.class);
-
-        //Obtenemos del servicio web
-        service.listRestaurantes(new Callback<List<Restaurante>>() {
-            @Override
-            public void success(List<Restaurante> restaurantes, Response response) {
-                Log.i("Success", "Correcto");
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.i("Fallo", "Detectado");
-                Log.e("Error", error.getLocalizedMessage());
-            }
-        });
-
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mToolbar);
