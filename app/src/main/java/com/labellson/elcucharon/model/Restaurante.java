@@ -1,6 +1,8 @@
-package com.labellson.elcucharon.ui.model;
+package com.labellson.elcucharon.model;
 
 import android.widget.ImageView;
+
+import com.google.gson.annotations.Expose;
 
 import java.math.BigDecimal;
 
@@ -9,12 +11,19 @@ import java.math.BigDecimal;
  */
 public class Restaurante {
 
+    @Expose
     private final int id;
+    @Expose
     private final String nombre;
+    @Expose
     private final BigDecimal lng;
+    @Expose
     private final BigDecimal lat;
-    private final int nMesas;
+    @Expose
+    private final int mesas;
+    @Expose
     private final String descripcion;
+    @Expose
     private final ImageView foto;
 
     public Restaurante(int id, String nombre, String descripcion, int nMesas, ImageView foto, BigDecimal lng, BigDecimal lat){
@@ -22,7 +31,7 @@ public class Restaurante {
         this.nombre = nombre;
         this.lng = lng;
         this.lat = lat;
-        this.nMesas = nMesas;
+        this.mesas = nMesas;
         this.descripcion = descripcion;
         this.foto = foto;
     }
@@ -35,8 +44,8 @@ public class Restaurante {
         return lat;
     }
 
-    public int getnMesas() {
-        return nMesas;
+    public int getMesas() {
+        return mesas;
     }
 
     public String getDescripcion() {

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.labellson.elcucharon.R;
 import com.labellson.elcucharon.ui.NavigationDrawerCallbacks;
-import com.labellson.elcucharon.ui.objects.NavigationItem;
+import com.labellson.elcucharon.objects.NavigationItem;
 
 import java.util.List;
 

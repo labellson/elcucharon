@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">elcucharon</string>
+    <string name="server_name">http://192.168.2.108:8084/elcucharon/restapi</string>
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
     <string name="action_settings">Settings</string>

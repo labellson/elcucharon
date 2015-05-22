@@ -1,4 +1,4 @@
-package com.labellson.elcucharon.ui.objects;
+package com.labellson.elcucharon.objects;
 
 
 import android.graphics.drawable.Drawable;
