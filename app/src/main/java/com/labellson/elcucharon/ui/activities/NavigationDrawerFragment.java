@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -122,6 +123,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             pDialog.setCancelable(true);
             pDialog.setMax(100);
             Button loginBtn = (Button) view.findViewById(R.id.btn_login);
+            Button registerBtn = (Button) view.findViewById(R.id.btn_registro);
+
             loginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -134,6 +137,14 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                         LoginTask login = new LoginTask(new User(txt_email.getText().toString(), txt_pass.getText().toString()), getActivity(), pDialog);
                         login.execute();
                     }
+                }
+            });
+
+            registerBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                    startActivity(intent);
                 }
             });
         }
