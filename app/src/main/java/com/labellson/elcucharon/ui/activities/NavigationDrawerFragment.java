@@ -2,6 +2,8 @@ package com.labellson.elcucharon.ui.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -21,13 +23,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.labellson.elcucharon.R;
+import com.labellson.elcucharon.model.User;
+import com.labellson.elcucharon.tasks.LoginTask;
 import com.labellson.elcucharon.ui.adapter.NavigationDrawerAdapter;
 import com.labellson.elcucharon.ui.NavigationDrawerCallbacks;
 import com.labellson.elcucharon.objects.NavigationItem;
@@ -77,8 +85,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+        SharedPreferences sp = getActivity().getSharedPreferences(getString(R.string.sp_name), Context.MODE_PRIVATE);
+        mUserLearnedDrawer = sp.getBoolean(getString(R.string.sp_learned_drawer), false);
+        int id = sp.getInt(getString(R.string.sp_user_id), -1);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
@@ -89,18 +98,45 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_navigation_drawer_logged, container, false);
-        mDrawerList = (RecyclerView) view.findViewById(R.id.drawerList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mDrawerList.setLayoutManager(layoutManager);
-        mDrawerList.setHasFixedSize(true);
+        View view;
+        if(mUserLearnedDrawer) {
+            view = inflater.inflate(R.layout.fragment_navigation_drawer_logged, container, false);
+            mDrawerList = (RecyclerView) view.findViewById(R.id.drawerList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mDrawerList.setLayoutManager(layoutManager);
+            mDrawerList.setHasFixedSize(true);
 
-        final List<NavigationItem> navigationItems = getMenu();
-        NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
-        adapter.setNavigationDrawerCallbacks(this);
-        mDrawerList.setAdapter(adapter);
-        selectItem(mCurrentSelectedPosition);
+            final List<NavigationItem> navigationItems = getMenu();
+            NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
+            adapter.setNavigationDrawerCallbacks(this);
+            mDrawerList.setAdapter(adapter);
+            selectItem(mCurrentSelectedPosition);
+        }else {
+            view = inflater.inflate(R.layout.fragment_navigation_drawer_login, container, false);
+            final EditText txt_email = (EditText) view.findViewById(R.id.txt_user_email);
+            final EditText txt_pass = (EditText) view.findViewById(R.id.txt_user_pass);
+            final ProgressDialog pDialog = new ProgressDialog(getActivity());
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pDialog.setMessage("Cargando...");
+            pDialog.setCancelable(true);
+            pDialog.setMax(100);
+            Button loginBtn = (Button) view.findViewById(R.id.btn_login);
+            loginBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(txt_email.getText().toString().isEmpty()){
+                        Toast.makeText(getActivity(), "Introduce un email", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(txt_pass.getText().toString().isEmpty()){
+                        Toast.makeText(getActivity(), "Introduce una contraseña", Toast.LENGTH_SHORT).show();
+                    }else {
+                        LoginTask login = new LoginTask(new User(txt_email.getText().toString(), txt_pass.getText().toString()), getActivity(), pDialog);
+                        login.execute();
+                    }
+                }
+            });
+        }
         return view;
     }
 
@@ -154,12 +190,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) return;
-                if (!mUserLearnedDrawer) {
+                /*if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
                     SharedPreferences sp = PreferenceManager
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }
+                }*/
                 getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

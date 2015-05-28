@@ -1,32 +1,33 @@
 package com.labellson.elcucharon.model;
 
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
-import com.google.gson.annotations.Expose;
+import com.labellson.elcucharon.util.DecodeBitmap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by labellson on 21/05/15.
  */
 public class Restaurante {
 
-    @Expose
     private final int id;
-    @Expose
     private final String nombre;
-    @Expose
     private final BigDecimal lng;
-    @Expose
     private final BigDecimal lat;
-    @Expose
     private final int mesas;
-    @Expose
     private final String descripcion;
-    @Expose
-    private final ImageView foto;
+    private final Bitmap foto;
 
-    public Restaurante(int id, String nombre, String descripcion, int nMesas, ImageView foto, BigDecimal lng, BigDecimal lat){
+    public Restaurante(int id, String nombre, String descripcion, int nMesas, Bitmap foto, BigDecimal lng, BigDecimal lat){
         this.id = id;
         this.nombre = nombre;
         this.lng = lng;
@@ -34,6 +35,23 @@ public class Restaurante {
         this.mesas = nMesas;
         this.descripcion = descripcion;
         this.foto = foto;
+    }
+
+    public static Restaurante deserialize(JSONObject jObj, int imageSize) throws JSONException {
+        return new Restaurante(jObj.getInt("id"), jObj.getString("nombre"),
+                jObj.getString("descripcion"), jObj.getInt("mesas"),
+                jObj.getString("foto") != null ? DecodeBitmap.decodeSampledBitmapFromBase64(jObj.getString("foto"), imageSize, imageSize) : null,
+                BigDecimal.valueOf(jObj.getDouble("lng")),
+                BigDecimal.valueOf(jObj.getDouble("lat")));
+    }
+
+    public static List<Restaurante> deserialize(JSONArray jArray, int imageSize) throws JSONException {
+        List<Restaurante> restaurantes = new ArrayList<Restaurante>();
+        for(int i=0; i < jArray.length(); i++){
+            JSONObject restaurante = jArray.getJSONObject(i);
+            restaurantes.add(deserialize(restaurante, imageSize));
+        }
+        return restaurantes;
     }
 
     public BigDecimal getLng() {
@@ -52,7 +70,7 @@ public class Restaurante {
         return descripcion;
     }
 
-    public ImageView getFoto() {
+    public Bitmap getFoto() {
         return foto;
     }
 

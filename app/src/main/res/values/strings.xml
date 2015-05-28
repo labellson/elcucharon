@@ -5,4 +5,18 @@
     <string name="drawer_close">Menu closed</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_pass">Contraseña</string>
+    <string name="button_login">Entrar</string>
+    <string name="btn_registro">Crear una cuenta</string>
+
+    <!-- Shared Preferences -->
+    <string name="sp_name">com.labellson.elcucharon.USER_SHARED_PREFERENCE</string>
+    <string name="sp_learned_drawer">PREF_USER_LEARNED_DRAWER</string>
+    <string name="sp_user_id">PREF_USER_ID</string>
+    <string name="sp_user_email">PREF_USER_EMAIL</string>
+    <string name="sp_user_auth">PREF_USER_AUTH</string>
+    <string name="sp_user_movil">PREF_USER_MOVIL</string>
+    <string name="sp_user_dni">PREF_USER_DNI</string>
+    <string name="sp_user_nombre">PREF_USER_NOMBRE</string>
 </resources>
