@@ -25,10 +25,14 @@ public class LoginTask extends AsyncTask<Void, Void, User> {
     private Context context;
     private ProgressDialog pDialog;
 
-    public LoginTask(User u, Context context, ProgressDialog pDialog){
+    public LoginTask(User u, Context context){
         user = u;
-        this.pDialog = pDialog;
         this.context = context;
+        pDialog = new ProgressDialog(context);
+        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pDialog.setMessage("Cargando...");
+        pDialog.setCancelable(true);
+        pDialog.setMax(100);
     }
 
     @Override
@@ -56,19 +60,7 @@ public class LoginTask extends AsyncTask<Void, Void, User> {
     protected void onPostExecute(User u) {
         pDialog.dismiss();
         if(u != null){
-            SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_name), Context.MODE_PRIVATE);
-            SharedPreferences.Editor sp_editor = sp.edit();
-
-            sp_editor.putBoolean(context.getString(R.string.sp_learned_drawer), true);
-            sp_editor.putInt(context.getString(R.string.sp_user_id), u.getId());
-            sp_editor.putString(context.getString(R.string.sp_user_email), u.getEmail());
-            sp_editor.putString(context.getString(R.string.sp_user_auth), u.getAuth());
-            sp_editor.putString(context.getString(R.string.sp_user_movil), u.getMovil());
-            sp_editor.putString(context.getString(R.string.sp_user_dni), u.getDni());
-            sp_editor.putString(context.getString(R.string.sp_user_nombre), u.getNombre());
-
-            sp_editor.commit();
-
+            u.save(context);
             Activity a = (Activity) context;
             a.recreate();
             //a.finish();

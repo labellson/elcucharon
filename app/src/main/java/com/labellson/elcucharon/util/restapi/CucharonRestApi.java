@@ -5,6 +5,7 @@ import com.labellson.elcucharon.model.User;
 import com.labellson.elcucharon.util.RequestJson;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +39,15 @@ public class CucharonRestApi {
         loggedUser.setAuth(u.getAuth());
 
         return loggedUser;
+    }
+
+    public static JSONObject registerUser(User u, String pass) throws JSONException, IOException {
+        String relativeUri = "/user";
+
+        Map<String, String > headers = new HashMap<String, String>();
+        headers.put(CONTENT_TYPE, MEDIATYPE_JSON);
+
+        return RequestJson.reqPostJSONObject(server + relativeUri, u.serializeRegisterJSON(pass), headers);
     }
 
 }

@@ -117,11 +117,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             view = inflater.inflate(R.layout.fragment_navigation_drawer_login, container, false);
             final EditText txt_email = (EditText) view.findViewById(R.id.txt_user_email);
             final EditText txt_pass = (EditText) view.findViewById(R.id.txt_user_pass);
-            final ProgressDialog pDialog = new ProgressDialog(getActivity());
-            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pDialog.setMessage("Cargando...");
-            pDialog.setCancelable(true);
-            pDialog.setMax(100);
+
             Button loginBtn = (Button) view.findViewById(R.id.btn_login);
             Button registerBtn = (Button) view.findViewById(R.id.btn_registro);
 
@@ -134,7 +130,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                     else if(txt_pass.getText().toString().isEmpty()){
                         Toast.makeText(getActivity(), "Introduce una contraseña", Toast.LENGTH_SHORT).show();
                     }else {
-                        LoginTask login = new LoginTask(new User(txt_email.getText().toString(), txt_pass.getText().toString()), getActivity(), pDialog);
+                        LoginTask login = new LoginTask(new User(txt_email.getText().toString(), txt_pass.getText().toString()), getActivity());
                         login.execute();
                     }
                 }

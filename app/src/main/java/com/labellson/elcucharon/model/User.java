@@ -1,7 +1,11 @@
 package com.labellson.elcucharon.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Base64;
+
+import com.labellson.elcucharon.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,25 +52,36 @@ public class User {
         auth = Base64.encodeToString((email+":"+pass).getBytes(), Base64.NO_WRAP);
     }
 
+    public void save(Context context){
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_name), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editor = sp.edit();
 
-    private static JSONObject serializeUser(User u) throws JSONException {
+        sp_editor.putBoolean(context.getString(R.string.sp_learned_drawer), true);
+        sp_editor.putInt(context.getString(R.string.sp_user_id), id);
+        sp_editor.putString(context.getString(R.string.sp_user_email), email);
+        sp_editor.putString(context.getString(R.string.sp_user_auth), auth);
+        sp_editor.putString(context.getString(R.string.sp_user_movil), movil);
+        sp_editor.putString(context.getString(R.string.sp_user_dni), dni);
+        sp_editor.putString(context.getString(R.string.sp_user_nombre), nombre);
+
+        sp_editor.commit();
+    }
+
+
+    public JSONObject serializeJSON() throws JSONException {
         JSONObject jObj = new JSONObject();
-        jObj.put("id", u.getId());
-        jObj.put("email", u.getEmail());
-        if(u.getMovil() != null) jObj.put("movil", u.getMovil());
-        if(u.getDni() != null) jObj.put("dni", u.getDni());
-        if(u.getNombre() != null) jObj.put("nombre", u.getNombre());
+        jObj.put("id", id);
+        jObj.put("email", email);
+        if(movil != null) jObj.put("movil", movil);
+        if(dni != null) jObj.put("dni", dni);
+        if(nombre != null) jObj.put("nombre", nombre);
         return jObj;
     }
 
-    public static String serialize(User u) throws JSONException {
-        return serializeUser(u).toString();
-    }
-
-    public static String serializeRegiter(User u, String pass) throws JSONException {
-        JSONObject jObj = serializeUser(u);
+    public JSONObject serializeRegisterJSON(String pass) throws JSONException {
+        JSONObject jObj = serializeJSON();
         jObj.put("pass", pass);
-        return jObj.toString();
+        return jObj;
     }
 
     public static User deserialize(JSONObject jObj) throws JSONException {

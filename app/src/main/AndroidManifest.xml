@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.activities.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,15 @@
         <activity
             android:name=".ui.activities.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName=".ui.activities.MainActivity">
+            android:parentActivityName=".ui.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.labellson.elcucharon.ui.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.RestauranteActivity"
+            android:label="@string/title_activity_restaurante"
+            android:parentActivityName=".ui.activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.labellson.elcucharon.ui.activities.MainActivity" />
