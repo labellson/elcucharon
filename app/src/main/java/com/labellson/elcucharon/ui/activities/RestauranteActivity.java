@@ -1,11 +1,14 @@
 package com.labellson.elcucharon.ui.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ public class RestauranteActivity extends AppCompatActivity {
     private Restaurante mRestaurante;
     private ImageView mImgRestaurante;
     private TextView mTxtDescripcionRestaurante;
+    private Button btnRservar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public class RestauranteActivity extends AppCompatActivity {
         setTitle(mRestaurante.getNombre());
         mImgRestaurante.setImageBitmap(mRestaurante.getFoto());
         mTxtDescripcionRestaurante.setText(mRestaurante.getDescripcion());
+
+        findViewById(R.id.btn_reservar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RestauranteActivity.this, ReservarActivity.class);
+                startActivity(intent);
+            }
+        });
 
         new FetchRestauranteTask(this, mImgRestaurante, mTxtDescripcionRestaurante, mRestaurante, mImgRestaurante.getWidth(), pBar).execute();
     }

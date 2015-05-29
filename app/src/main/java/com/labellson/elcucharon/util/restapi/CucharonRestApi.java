@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class CucharonRestApi {
 
-    private static final String server = "http://192.168.2.108:8084/elcucharon/restapi";
+    private static final String server = "http://192.168.43.46:8084/elcucharon/restapi";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String AUTH = "Authorization";
     private static final String MEDIATYPE_JSON = "application/json";
