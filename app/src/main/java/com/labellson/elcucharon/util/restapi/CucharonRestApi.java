@@ -28,6 +28,11 @@ public class CucharonRestApi {
         return Restaurante.deserialize(RequestJson.reqGetJSONArray(server + relativeUri), imageSize);
     }
 
+    public static Restaurante fetchRestaurante(int id, int size) throws IOException, JSONException {
+        String relativeUri = "/restaurante/";
+        return Restaurante.deserialize(RequestJson.reqGetJSONObject(server + relativeUri + id), size);
+    }
+
     //Logueara al usuario, mediante Basic Authorization. Basta con que u tenga email y pass
     public static User loginUser(User u) throws IOException, JSONException {
         String relativeUri = "/user/email/";
@@ -44,10 +49,9 @@ public class CucharonRestApi {
     public static JSONObject registerUser(User u, String pass) throws JSONException, IOException {
         String relativeUri = "/user";
 
-        Map<String, String > headers = new HashMap<String, String>();
+        Map<String, String> headers = new HashMap<String, String>();
         headers.put(CONTENT_TYPE, MEDIATYPE_JSON);
 
         return RequestJson.reqPostJSONObject(server + relativeUri, u.serializeRegisterJSON(pass), headers);
     }
-
 }

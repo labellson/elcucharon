@@ -1,6 +1,8 @@
 package com.labellson.elcucharon.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -10,6 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +24,7 @@ import java.util.List;
 /**
  * Created by labellson on 21/05/15.
  */
-public class Restaurante {
+public class Restaurante implements Serializable {
 
     private final int id;
     private final String nombre;
@@ -25,7 +32,7 @@ public class Restaurante {
     private final BigDecimal lat;
     private final int mesas;
     private final String descripcion;
-    private final Bitmap foto;
+    private transient Bitmap foto;
 
     public Restaurante(int id, String nombre, String descripcion, int nMesas, Bitmap foto, BigDecimal lng, BigDecimal lat){
         this.id = id;

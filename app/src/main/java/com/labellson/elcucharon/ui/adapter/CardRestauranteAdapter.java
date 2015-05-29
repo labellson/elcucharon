@@ -15,9 +15,10 @@ import java.util.List;
 /**
  * Created by dani on 26/05/15.
  */
-public class CardRestauranteAdapter extends RecyclerView.Adapter<CardRestauranteAdapter.ViewHolder> {
+public class CardRestauranteAdapter extends RecyclerView.Adapter<CardRestauranteAdapter.ViewHolder> implements View.OnClickListener {
 
     private List<Restaurante> restaurantes;
+    private View.OnClickListener listener;
 
     public CardRestauranteAdapter(List<Restaurante> restaurantes) {
         this.restaurantes = restaurantes;
@@ -27,7 +28,13 @@ public class CardRestauranteAdapter extends RecyclerView.Adapter<CardRestaurante
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.restaurante_view, parent, false);
 
+        view.setOnClickListener(this);
+
         return new ViewHolder(view);
+    }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -38,6 +45,11 @@ public class CardRestauranteAdapter extends RecyclerView.Adapter<CardRestaurante
     @Override
     public int getItemCount() {
         return restaurantes.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(listener != null) listener.onClick(v);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

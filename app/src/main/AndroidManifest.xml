@@ -34,6 +34,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.labellson.elcucharon.ui.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.ReservarActivity"
+            android:label="@string/title_activity_reservar"
+            android:parentActivityName=".ui.activities.RestauranteActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.labellson.elcucharon.ui.activities.RestauranteActivity" />
+        </activity>
     </application>
 
 </manifest>

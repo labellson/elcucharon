@@ -1,6 +1,8 @@
 package com.labellson.elcucharon.ui.activities;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.labellson.elcucharon.R;
@@ -28,7 +31,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerCallbacks {
+        implements NavigationDrawerCallbacks, View.OnClickListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,6 +39,7 @@ public class MainActivity extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Toolbar mToolbar;
     private RecyclerView recView;
+    private List<Restaurante> restaurantes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
         // populate the navigation drawer
         //mNavigationDrawerFragment.setUserData("Daniel", "labellson@gmail.com", BitmapFactory.decodeResource(getResources(), R.drawable.avatar));
-        ListRestaurantes restaurantes_async_task = new ListRestaurantes();
+        ListRestaurantes restaurantes_async_task = new ListRestaurantes(this);
         restaurantes_async_task.execute();
     }
 
@@ -105,11 +109,27 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, RestauranteActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("RESTAURANTE", restaurantes.get(recView.getChildAdapterPosition(v)));
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     private class ListRestaurantes extends AsyncTask<Void, Void, List<Restaurante>>{
+
+        public ListRestaurantes(Context context) {
+            this.context = context;
+        }
+
+        private Context context;
+
         @Override
         protected List<Restaurante> doInBackground(Void... params) {
             try {
-                return CucharonRestApi.listRestaurantes(recView.getWidth());
+                return CucharonRestApi.listRestaurantes(200);
             } catch (IOException e) {
                 Log.e("Rest listRestaurante", "IOException", e);
                 return null;
@@ -125,13 +145,15 @@ public class MainActivity extends ActionBarActivity
         }
 
         @Override
-        protected void onPostExecute(List<Restaurante> result) {
+        protected void onPostExecute(final List<Restaurante> result) {
             if(result == null){
                 Toast.makeText(MainActivity.this, "Sin Resultados", Toast.LENGTH_SHORT).show();
                 Log.i("fallo","No funciono");
             }else{
+                restaurantes = result;
                 //Creamos el adapter
-                final CardRestauranteAdapter adapter = new CardRestauranteAdapter(result);
+                CardRestauranteAdapter adapter = new CardRestauranteAdapter(result);
+                adapter.setOnClickListener((View.OnClickListener) context);
                 recView.setAdapter(adapter);
 
                 Log.i("Success", "de puta madre");
