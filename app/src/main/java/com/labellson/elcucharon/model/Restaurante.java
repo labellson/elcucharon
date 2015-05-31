@@ -34,6 +34,15 @@ public class Restaurante implements Serializable {
     private final String descripcion;
     private transient Bitmap foto;
 
+    public Restaurante(int id){
+        this.id = id;
+        lat = null;
+        mesas = 0;
+        lng = null;
+        nombre = null;
+        descripcion = null;
+    }
+
     public Restaurante(int id, String nombre, String descripcion, int nMesas, Bitmap foto, BigDecimal lng, BigDecimal lat){
         this.id = id;
         this.nombre = nombre;
@@ -47,7 +56,7 @@ public class Restaurante implements Serializable {
     public static Restaurante deserialize(JSONObject jObj, int imageSize) throws JSONException {
         return new Restaurante(jObj.getInt("id"), jObj.getString("nombre"),
                 jObj.getString("descripcion"), jObj.getInt("mesas"),
-                jObj.getString("foto") != null ? DecodeBitmap.decodeSampledBitmapFromBase64(jObj.getString("foto"), imageSize, imageSize) : null,
+                jObj.optString("foto") != null ? DecodeBitmap.decodeSampledBitmapFromBase64(jObj.getString("foto"), imageSize, imageSize) : null,
                 BigDecimal.valueOf(jObj.getDouble("lng")),
                 BigDecimal.valueOf(jObj.getDouble("lat")));
     }

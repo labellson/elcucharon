@@ -8,10 +8,7 @@
         android:layout_width="match_parent" android:layout_height="wrap_content" />
 
     <ScrollView
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,15 +16,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <CalendarView
-                android:id="@+id/reserva_calendar"
+            <LinearLayout
+                android:id="@+id/calendar"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:firstDayOfWeek="2"
-                android:showWeekNumber="false"/>
+                android:layout_height="380dp">
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/btn_elegir_hora"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/nav_row_ripple"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:clickable="true">
+
+                    <TextView
+                        android:text="@string/btn_elegir_hora"
+                        android:textSize="@dimen/abc_text_size_menu_material"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/value_elegir_hora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
     </ScrollView>
+
+    <include android:id="@+id/toolbar_reservar" layout="@layout/toolbar_reservar"
+        android:layout_width="match_parent" android:layout_height="wrap_content" />
 
 </LinearLayout>

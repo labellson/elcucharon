@@ -27,4 +27,8 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
+
+    <style name="CaldroidCustom" parent="CaldroidDefault">
+
+    </style>
 </resources>

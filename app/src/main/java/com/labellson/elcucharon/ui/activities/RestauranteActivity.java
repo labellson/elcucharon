@@ -36,7 +36,11 @@ public class RestauranteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setStatusBarColor(getResources().getColor(R.color.myPrimaryDarkColor));
 
-        mRestaurante = (Restaurante) this.getIntent().getExtras().getSerializable("RESTAURANTE");
+        Bundle extras;
+        if(savedInstanceState != null) extras = savedInstanceState;
+        else extras = this.getIntent().getExtras();
+
+        mRestaurante = (Restaurante) extras.getSerializable("RESTAURANTE");
         mImgRestaurante = (ImageView) findViewById(R.id.img_restaurante);
         mTxtDescripcionRestaurante = (TextView) findViewById(R.id.label_restaurante_descripcion);
         ProgressBar pBar = (ProgressBar) findViewById(R.id.loadingPanel);
@@ -49,11 +53,26 @@ public class RestauranteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RestauranteActivity.this, ReservarActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("ID_RESTAURANTE", mRestaurante.getId());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
 
         new FetchRestauranteTask(this, mImgRestaurante, mTxtDescripcionRestaurante, mRestaurante, mImgRestaurante.getWidth(), pBar).execute();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("RESTAURANTE", mRestaurante);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mRestaurante = (Restaurante) savedInstanceState.getSerializable("RESTAURANTE");
     }
 
     @Override

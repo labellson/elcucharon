@@ -1,13 +1,17 @@
 package com.labellson.elcucharon.util.restapi;
 
+import com.labellson.elcucharon.model.Reserva;
 import com.labellson.elcucharon.model.Restaurante;
 import com.labellson.elcucharon.model.User;
 import com.labellson.elcucharon.util.RequestJson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +21,7 @@ import java.util.Map;
  */
 public class CucharonRestApi {
 
-    private static final String server = "http://192.168.43.46:8084/elcucharon/restapi";
+    private static final String server = "http://192.168.2.108:8084/elcucharon/restapi";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String AUTH = "Authorization";
     private static final String MEDIATYPE_JSON = "application/json";
@@ -53,5 +57,43 @@ public class CucharonRestApi {
         headers.put(CONTENT_TYPE, MEDIATYPE_JSON);
 
         return RequestJson.reqPostJSONObject(server + relativeUri, u.serializeRegisterJSON(pass), headers);
+    }
+
+    //Devuelve una lista de fechas para las que el restaurante tiene las reservas llenas
+    public static List<Date> fetchReservasRestaurante(int idRestaurante) throws IOException, JSONException {
+        String relativeUri= "/reserva/restaurante/";
+
+        JSONArray jArray = RequestJson.reqGetJSONArray(server + relativeUri + idRestaurante);
+        List<Date> d = new ArrayList<Date>();
+
+        for(int i=0; i < jArray.length(); i++){
+            d.add(new Date(jArray.getJSONObject(i).getLong("fecha")));
+        }
+
+        return d;
+    }
+
+    //Devuelve una lista de horas en las que el restaurante no tiene reserva
+    public static String[] fetchHoraReservas(int idRestaurante, Date d) throws IOException, JSONException {
+        String relativeUri= "/reserva/restaurante/";
+
+        JSONArray jArray = RequestJson.reqGetJSONArray(server + relativeUri + idRestaurante +"/"+ d.getTime());
+        String[] h = new String[jArray.length()];
+
+        for(int i=0; i < jArray.length(); i++)
+            h[i] = jArray.getJSONObject(i).getString("hora");
+
+        return h;
+    }
+
+    //Hara un POST, para añadir una reserva
+    public static boolean registerReserva(Reserva r, String auth) throws JSONException, IOException {
+        String relativeUri = "/reserva";
+
+        Map<String, String > headers = new HashMap<String, String>();
+        headers.put(CONTENT_TYPE, MEDIATYPE_JSON);
+        headers.put(AUTH, "Basic "+ auth);
+
+        return RequestJson.reqPostJSONObject(server + relativeUri, r.serializeJSON(), headers).has("id");
     }
 }

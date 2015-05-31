@@ -16,6 +16,8 @@
     <color name="myTextPrimaryColor">#212121</color>
     <color name="myNavigationColor">#000</color>
     <color name="teal">#26a69a</color>
+    <color name="caldroid">#f44336</color>
+    <color name="grey">#9e9e9e</color>
 
     <drawable name="pressed_gray">#0c000000</drawable>
     <drawable name="selected_gray">#2c000000</drawable>
