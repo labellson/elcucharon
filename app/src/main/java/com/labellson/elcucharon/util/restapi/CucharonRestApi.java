@@ -86,7 +86,7 @@ public class CucharonRestApi {
         return h;
     }
 
-    //Hara un POST, para añadir una reserva
+    //POST, para añadir una reserva
     public static boolean registerReserva(Reserva r, String auth) throws JSONException, IOException {
         String relativeUri = "/reserva";
 
@@ -95,5 +95,25 @@ public class CucharonRestApi {
         headers.put(AUTH, "Basic "+ auth);
 
         return RequestJson.reqPostJSONObject(server + relativeUri, r.serializeJSON(), headers).has("id");
+    }
+
+    //Fetch de las reservas de un usuario
+    public static List<Reserva> fetchReservas(User u) throws IOException, JSONException {
+        String relativeUri = "/reserva/user/";
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put(AUTH, "Basic "+ u.getAuth());
+
+        return Reserva.deserializeJSON(RequestJson.reqGetJSONArray(server + relativeUri + u.getId(), headers));
+    }
+
+    //Elimina una reserva
+    public static void deleteReserva(int idReserva, String auth) throws IOException {
+        String relativeUri = "/reserva/";
+
+        Map<String, String> headers = new HashMap<String, String >();
+        headers.put(AUTH, "Basic "+auth);
+
+        RequestJson.reqDelete(server + relativeUri + idReserva, headers);
     }
 }

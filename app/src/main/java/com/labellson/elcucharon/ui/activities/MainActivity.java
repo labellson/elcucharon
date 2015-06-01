@@ -68,7 +68,13 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
+        switch (position){
+            case 0:
+                Intent intent = new Intent(MainActivity.this, ListReservasActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
 
@@ -156,7 +162,7 @@ public class MainActivity extends ActionBarActivity
                 adapter.setOnClickListener((View.OnClickListener) context);
                 recView.setAdapter(adapter);
 
-                Log.i("Success", "de puta madre");
+                Log.i("Success", "Ferpecto");
             }
         }
     }

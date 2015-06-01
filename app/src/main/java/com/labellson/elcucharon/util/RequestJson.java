@@ -4,6 +4,7 @@ import android.net.http.AndroidHttpClient;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -67,6 +68,13 @@ public class RequestJson {
         }finally {
             httpClient.close();
         }
+    }
+
+    public static void reqDelete(String uri, Map<String, String> headers) throws IOException {
+        final AndroidHttpClient httpClient = AndroidHttpClient.newInstance("Android");
+        final HttpDelete delete = new HttpDelete(uri);
+        delete.setHeaders(getHeaders(headers));
+        httpClient.execute(delete);
     }
 
     /**

@@ -112,7 +112,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
             adapter.setNavigationDrawerCallbacks(this);
             mDrawerList.setAdapter(adapter);
-            selectItem(mCurrentSelectedPosition);
+//            selectItem(mCurrentSelectedPosition);
         }else {
             view = inflater.inflate(R.layout.fragment_navigation_drawer_login, container, false);
             final EditText txt_email = (EditText) view.findViewById(R.id.txt_user_email);
@@ -167,7 +167,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     public List<NavigationItem> getMenu() {
         List<NavigationItem> items = new ArrayList<NavigationItem>();
         items.add(new NavigationItem("Reservas", getResources().getDrawable(R.drawable.ic_action_list)));
-        items.add(new NavigationItem("Favoritos", getResources().getDrawable(R.drawable.ic_action_favorite)));
+//        items.add(new NavigationItem("Favoritos", getResources().getDrawable(R.drawable.ic_action_favorite)));
         return items;
     }
 

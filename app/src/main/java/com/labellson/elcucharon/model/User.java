@@ -67,6 +67,17 @@ public class User {
         sp_editor.commit();
     }
 
+    public static User load(Context context){
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.sp_name), Context.MODE_PRIVATE);
+        User u = new User(sp.getString(context.getString(R.string.sp_user_email), null),
+                sp.getString(context.getString(R.string.sp_user_movil), null),
+                sp.getString(context.getString(R.string.sp_user_dni), null),
+                sp.getString(context.getString(R.string.sp_user_nombre), null),
+                null, sp.getInt(context.getString(R.string.sp_user_id), -1));
+        u.setAuth(sp.getString(context.getString(R.string.sp_user_auth), null));
+        return u;
+    }
+
 
     public JSONObject serializeJSON() throws JSONException {
         JSONObject jObj = new JSONObject();

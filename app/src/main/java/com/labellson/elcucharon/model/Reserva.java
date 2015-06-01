@@ -1,9 +1,12 @@
 package com.labellson.elcucharon.model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by dani on 30/05/15.
@@ -42,7 +45,17 @@ public class Reserva {
         return new Reserva(jObj.getInt("id"),
                 new Date(jObj.getLong("fecha")),
                 jObj.getInt("idUser"),
-                Restaurante.deserialize(jObj.getJSONObject("idRestaurante"), 200));
+                Restaurante.deserialize(jObj.getJSONObject("idRestaurante"), 80));
+    }
+
+    public static List<Reserva> deserializeJSON(JSONArray jArray) throws JSONException {
+        List<Reserva> r = new ArrayList<Reserva>();
+
+        for (int i=0; i < jArray.length(); i++){
+            r.add(deserializeJSON(jArray.getJSONObject(i)));
+        }
+
+        return r;
     }
 
     public int getId() {

@@ -24,7 +24,6 @@ public class RestauranteActivity extends AppCompatActivity {
     private Restaurante mRestaurante;
     private ImageView mImgRestaurante;
     private TextView mTxtDescripcionRestaurante;
-    private Button btnRservar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,17 @@ public class RestauranteActivity extends AppCompatActivity {
                 Intent intent = new Intent(RestauranteActivity.this, ReservarActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("ID_RESTAURANTE", mRestaurante.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.btn_mapa).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new  Intent(RestauranteActivity.this, MapActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("RESTAURANTE", mRestaurante);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

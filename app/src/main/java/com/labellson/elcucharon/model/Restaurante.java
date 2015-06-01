@@ -28,8 +28,8 @@ public class Restaurante implements Serializable {
 
     private final int id;
     private final String nombre;
-    private final BigDecimal lng;
-    private final BigDecimal lat;
+    private final Double lng;
+    private final Double lat;
     private final int mesas;
     private final String descripcion;
     private transient Bitmap foto;
@@ -43,7 +43,7 @@ public class Restaurante implements Serializable {
         descripcion = null;
     }
 
-    public Restaurante(int id, String nombre, String descripcion, int nMesas, Bitmap foto, BigDecimal lng, BigDecimal lat){
+    public Restaurante(int id, String nombre, String descripcion, int nMesas, Bitmap foto, Double lng, Double lat){
         this.id = id;
         this.nombre = nombre;
         this.lng = lng;
@@ -57,8 +57,8 @@ public class Restaurante implements Serializable {
         return new Restaurante(jObj.getInt("id"), jObj.getString("nombre"),
                 jObj.getString("descripcion"), jObj.getInt("mesas"),
                 jObj.optString("foto") != null ? DecodeBitmap.decodeSampledBitmapFromBase64(jObj.getString("foto"), imageSize, imageSize) : null,
-                BigDecimal.valueOf(jObj.getDouble("lng")),
-                BigDecimal.valueOf(jObj.getDouble("lat")));
+                jObj.getDouble("lng"),
+                jObj.getDouble("lat"));
     }
 
     public static List<Restaurante> deserialize(JSONArray jArray, int imageSize) throws JSONException {
@@ -70,11 +70,11 @@ public class Restaurante implements Serializable {
         return restaurantes;
     }
 
-    public BigDecimal getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public BigDecimal getLat() {
+    public Double getLat() {
         return lat;
     }
 
