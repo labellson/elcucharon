@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.labellson.elcucharon.ui.widget;
 
 import android.content.Context;
@@ -31,6 +30,8 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.labellson.elcucharon.R;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -223,7 +224,11 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (i == mViewPager.getCurrentItem()) {
                 tabView.setSelected(true);
             }
+
+            tabTitleView.setTextColor(getResources().getColorStateList(R.color.tab_selector));
+            tabTitleView.setTextSize(14);
         }
+
     }
 
     public void setContentDescription(int i, String desc) {

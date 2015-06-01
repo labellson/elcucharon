@@ -1,42 +1,39 @@
 package com.labellson.elcucharon.ui.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.labellson.elcucharon.R;
 import com.labellson.elcucharon.model.Reserva;
 import com.labellson.elcucharon.model.User;
 import com.labellson.elcucharon.ui.adapter.ListReservaAdapter;
+import com.labellson.elcucharon.ui.adapter.ViewPagerAdapter;
+import com.labellson.elcucharon.ui.widget.SlidingTabLayout;
 import com.labellson.elcucharon.util.restapi.CucharonRestApi;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-public class ListReservasActivity extends AppCompatActivity implements View.OnLongClickListener {
+public class ListReservasActivity extends AppCompatActivity{
 
     private Toolbar mToolbar;
-    private RecyclerView recView;
-    private List<Reserva> mReservas;
-    private ListReservaAdapter mAdapter;
+    ViewPager pager;
+    ViewPagerAdapter adapter;
+    SlidingTabLayout slidingTabLayout;
+    CharSequence Titles[]={"Pasadas","Activas"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +45,22 @@ public class ListReservasActivity extends AppCompatActivity implements View.OnLo
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setStatusBarColor(getResources().getColor(R.color.myPrimaryDarkColor));
 
-        recView = (RecyclerView) findViewById(R.id.rec_view_list_reserva);
-        recView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recView.setItemAnimator(new DefaultItemAnimator());
+//        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles);
+
+        pager = (ViewPager) findViewById(R.id.pager);
+//        pager.setAdapter(adapter);
+
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        slidingTabLayout.setDistributeEvenly(true);
+
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+//        slidingTabLayout.setViewPager(pager);
 
         new FetchReservasTask().execute();
     }
@@ -75,14 +85,6 @@ public class ListReservasActivity extends AppCompatActivity implements View.OnLo
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        DeleteReservaDialogFragment df = new DeleteReservaDialogFragment();
-        df.setIdReserva(mReservas.get(recView.getChildAdapterPosition(v)).getId(), recView.getChildAdapterPosition(v));
-        df.show(getFragmentManager(), "DeleteReserva");
-        return true;
     }
 
     public class FetchReservasTask extends AsyncTask<Void, Void, List<Reserva>> {
@@ -119,65 +121,23 @@ public class ListReservasActivity extends AppCompatActivity implements View.OnLo
         @Override
         protected void onPostExecute(List<Reserva> reservas) {
             if(reservas != null) {
-                mReservas = reservas;
-
-                mAdapter = new ListReservaAdapter(reservas);
-//            adapter.setOnClickListener(ListReservas.this);
-                mAdapter.setOnLongClickListener(ListReservasActivity.this);
-                recView.setAdapter(mAdapter);
+                GregorianCalendar gc = new GregorianCalendar(new GregorianCalendar().get(Calendar.YEAR),
+                        new GregorianCalendar().get(Calendar.MONTH),
+                        new GregorianCalendar().get(Calendar.DAY_OF_MONTH));
+                List<Reserva> r_pasadas = new ArrayList<Reserva>();
+                List<Reserva> r_activa = new ArrayList<Reserva>();
+                for(Reserva r : reservas){
+                    if(r.getFecha().before(gc.getTime())){
+                        r_pasadas.add(r);
+                    }else{
+                        r_activa.add(r);
+                    }
+                }
+                adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles, r_pasadas, r_activa);
+                pager.setAdapter(adapter);
+                slidingTabLayout.setViewPager(pager);
             }
             pDialog.dismiss();
-        }
-    }
-
-    private class DeleteReservaTask extends AsyncTask<Void, Void,Void>{
-
-        private int idReserva;
-        private int position;
-
-        public DeleteReservaTask(int idReserva, int position) {
-            this.idReserva = idReserva;
-            this.position = position;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Toast.makeText(ListReservasActivity.this, "Reserva Cancelada", Toast.LENGTH_SHORT).show();
-            mReservas.remove(position);
-            mAdapter.notifyItemRemoved(position);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                CucharonRestApi.deleteReserva(idReserva, User.load(ListReservasActivity.this).getAuth());
-            } catch (IOException e) {
-                Log.e("IOException", "DeleteReservaTask", e);
-            }
-            return null;
-        }
-    }
-
-    public class DeleteReservaDialogFragment extends DialogFragment{
-
-        private int idReserva;
-        private int position;
-
-        public void setIdReserva(int idReserva, int position){
-            this.idReserva = idReserva;
-            this.position = position;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getString(R.string.cancelar_reserva)).setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    new DeleteReservaTask(idReserva, position).execute();
-                }
-            }).setNegativeButton("No", null);
-            return builder.create();
         }
     }
 }

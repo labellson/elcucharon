@@ -6,10 +6,18 @@
     <include android:id="@+id/toolbar_actionbar" layout="@layout/toolbar_default"
         android:layout_width="match_parent" android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rec_view_list_reserva"
+    <com.labellson.elcucharon.ui.widget.SlidingTabLayout
+        android:id="@+id/tabs"
         android:layout_below="@id/toolbar_actionbar"
+        android:background="@color/myPrimaryColor"
+        android:elevation="@dimen/toolbar_elevation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/tabs"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
 
 </RelativeLayout>
