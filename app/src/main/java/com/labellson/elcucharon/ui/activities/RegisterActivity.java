@@ -150,10 +150,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void registrar(){
         if(txtUserDni.getText().toString().isEmpty())
             Toast.makeText(RegisterActivity.this, "Introduce un dni", Toast.LENGTH_SHORT).show();
+        else if(!txtUserDni.getText().toString().matches("^((([A-Z]|[a-z])\\d{8})|(\\d{8}([A-Z]|[a-z])))$"))
+            Toast.makeText(RegisterActivity.this, "Introduce un dni valido", Toast.LENGTH_SHORT).show();
         else if(txtUserMovil.getText().toString().isEmpty())
             Toast.makeText(RegisterActivity.this, "Introduce un telefono", Toast.LENGTH_SHORT).show();
+        else if(!txtUserMovil.getText().toString().matches("^[9|6|7][0-9]{8}$"))
+            Toast.makeText(RegisterActivity.this, "Introduce un telefono valido", Toast.LENGTH_SHORT).show();
         else if(txtUserEmail.getText().toString().isEmpty())
             Toast.makeText(RegisterActivity.this, "Introduce el email", Toast.LENGTH_SHORT).show();
+        else if(!txtUserEmail.getText().toString().matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$"))
+            Toast.makeText(RegisterActivity.this, "Introduce un email valido", Toast.LENGTH_SHORT).show();
         else if(txtUserPass.getText().toString().isEmpty())
             Toast.makeText(RegisterActivity.this, "Introduce una contraseña", Toast.LENGTH_SHORT).show();
         else {
