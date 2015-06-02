@@ -19,6 +19,7 @@
     <string name="sp_user_movil">PREF_USER_MOVIL</string>
     <string name="sp_user_dni">PREF_USER_DNI</string>
     <string name="sp_user_nombre">PREF_USER_NOMBRE</string>
+    <string name="sp_user_foto">PREF_USER_FOTO</string>
     <string name="hint_nombre">Nombre</string>
     <string name="hint_dni">Dni</string>
     <string name="hint_movil">Movil</string>

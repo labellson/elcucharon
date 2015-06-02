@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -272,11 +273,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void setUserData(String user, String email, Bitmap avatar) {
+    public void setUserData(User u) {
         ImageView avatarContainer = (ImageView) mFragmentContainerView.findViewById(R.id.imgAvatar);
-        ((TextView) mFragmentContainerView.findViewById(R.id.txtUserEmail)).setText(email);
-        ((TextView) mFragmentContainerView.findViewById(R.id.txtUsername)).setText(user);
-        avatarContainer.setImageDrawable(new RoundImage(avatar));
+        ((TextView) mFragmentContainerView.findViewById(R.id.txtUserEmail)).setText(u.getEmail());
+        if(u.getNombre() != null)((TextView) mFragmentContainerView.findViewById(R.id.txtUsername)).setText(u.getNombre());
+        if(u.getFoto() != null) avatarContainer.setImageDrawable(new RoundImage(u.getFoto()));
+        else avatarContainer.setImageDrawable(new RoundImage(BitmapFactory.decodeResource(getResources(), R.drawable.ic_account_circle_white_48dp)));
     }
 
     public View getGoogleDrawer() {

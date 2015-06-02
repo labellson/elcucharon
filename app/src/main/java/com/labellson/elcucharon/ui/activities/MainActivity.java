@@ -1,12 +1,11 @@
 package com.labellson.elcucharon.ui.activities;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 
 import com.labellson.elcucharon.R;
 import com.labellson.elcucharon.model.Restaurante;
+import com.labellson.elcucharon.model.User;
 import com.labellson.elcucharon.ui.NavigationDrawerCallbacks;
 import com.labellson.elcucharon.ui.adapter.CardRestauranteAdapter;
 import com.labellson.elcucharon.util.restapi.CucharonRestApi;
@@ -57,10 +57,10 @@ public class MainActivity extends ActionBarActivity
         recView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recView.setItemAnimator(new DefaultItemAnimator());
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
-        // populate the navigation drawer
-        //mNavigationDrawerFragment.setUserData("Daniel", "labellson@gmail.com", BitmapFactory.decodeResource(getResources(), R.drawable.avatar));
+        //Si hay un usuario rellena la navbar
+        SharedPreferences sp = getSharedPreferences(getString(R.string.sp_name), Context.MODE_PRIVATE);
+        if(sp.getBoolean(getString(R.string.sp_learned_drawer),false)) mNavigationDrawerFragment.setUserData(User.load(this));
         ListRestaurantes restaurantes_async_task = new ListRestaurantes(this);
         restaurantes_async_task.execute();
     }
