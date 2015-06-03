@@ -97,7 +97,7 @@ public class User {
     public JSONObject serializeJSON() throws JSONException {
         JSONObject jObj = new JSONObject();
         jObj.put("id", id);
-        jObj.put("email", email);
+        if(email != null) jObj.put("email", email);
         if(movil != null) jObj.put("movil", movil);
         if(dni != null) jObj.put("dni", dni);
         if(nombre != null) jObj.put("nombre", nombre);
@@ -134,6 +134,10 @@ public class User {
 
     public void setAuth(String auth){
         this.auth = auth;
+    }
+
+    public void setNewAuth(String pass){
+        auth = Base64.encodeToString((email+":"+pass).getBytes(), Base64.NO_WRAP);
     }
 
     public String getEmail() {

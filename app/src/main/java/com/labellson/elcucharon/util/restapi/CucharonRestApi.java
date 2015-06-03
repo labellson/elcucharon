@@ -59,6 +59,25 @@ public class CucharonRestApi {
         return RequestJson.reqPostJSONObject(server + relativeUri, u.serializeRegisterJSON(pass), headers);
     }
 
+    public static JSONObject editUser(User u, String pass) throws JSONException, IOException {
+        String relativeUri = "/user/";
+
+        Map<String , String> headers = new HashMap<String, String >();
+        headers.put(CONTENT_TYPE, MEDIATYPE_JSON);
+        headers.put(AUTH, "Basic "+u.getAuth());
+
+        return RequestJson.reqPutJSONObject(server + relativeUri + u.getId(), !pass.equals("") ? u.serializeRegisterJSON(pass) : u.serializeJSON(), headers);
+    }
+
+    /*public static void deleteUser(User u) throws IOException {
+        String relativeUri = "/user/";
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put(AUTH, "Basic "+u.getAuth());
+
+        RequestJson.reqDelete(server + relativeUri + u.getId(), headers);
+    }*/
+
     //Devuelve una lista de fechas para las que el restaurante tiene las reservas llenas
     public static List<Date> fetchReservasRestaurante(int idRestaurante) throws IOException, JSONException {
         String relativeUri= "/reserva/restaurante/";

@@ -42,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Bitmap mBitmap;
     private final int IMAGE = 1;
     private final int PIC_CROP = 2;
+    private boolean mEdit;
 
 
     @Override
@@ -64,8 +65,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         imgAvatar.setOnClickListener(this);
 
         btnRegistro = (Button) findViewById(R.id.btn_registro);
-
         btnRegistro.setOnClickListener(this);
+
+        //Comprobamos si estamos editando o registrando
+        mEdit = getIntent().getBooleanExtra("EDIT", false);
+        if(mEdit){
+            User u = User.load(this);
+            setTitle("Editar Usuario");
+            btnRegistro.setText("Editar cuenta");
+            txtUserName.setText(u.getNombre());
+            txtUserDni.setText(u.getDni());
+            txtUserMovil.setText(u.getMovil());
+            txtUserEmail.setText(u.getEmail());
+            mBitmap = u.getFoto();
+            if(mBitmap != null) imgAvatar.setImageDrawable(new NavigationDrawerFragment.RoundImage(mBitmap));
+//            Button btnDelete = (Button) findViewById(R.id.btn_delete_user);
+//            btnDelete.setVisibility(View.VISIBLE);
+//            btnDelete.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -147,6 +164,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    //Tambien se usa para Editar
     public void registrar(){
         if(txtUserDni.getText().toString().isEmpty())
             Toast.makeText(RegisterActivity.this, "Introduce un dni", Toast.LENGTH_SHORT).show();
@@ -160,15 +178,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(RegisterActivity.this, "Introduce el email", Toast.LENGTH_SHORT).show();
         else if(!txtUserEmail.getText().toString().matches("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$"))
             Toast.makeText(RegisterActivity.this, "Introduce un email valido", Toast.LENGTH_SHORT).show();
-        else if(txtUserPass.getText().toString().isEmpty())
+        else if(txtUserPass.getText().toString().isEmpty() && !mEdit)
             Toast.makeText(RegisterActivity.this, "Introduce una contraseña", Toast.LENGTH_SHORT).show();
         else {
-            User u = new User(txtUserEmail.getText().toString(),
-                    txtUserMovil.getText().toString(),
-                    txtUserDni.getText().toString(),
-                    txtUserName.getText().toString(),
-                    mBitmap, txtUserPass.getText().toString());
-            RegisterTask registerTask = new RegisterTask(u, txtUserPass.getText().toString(), RegisterActivity.this);
+            User u;
+            if(mEdit){
+                u = User.load(this);
+                u.setDni(txtUserDni.getText().toString());
+                u.setMovil(txtUserMovil.getText().toString());
+                u.setEmail(txtUserEmail.getText().toString());
+                u.setNombre(txtUserName.getText().toString());
+                u.setFoto(mBitmap);
+                if(!txtUserPass.getText().toString().isEmpty()) u.setNewAuth(txtUserPass.getText().toString());
+            }else {
+                u = new User(txtUserEmail.getText().toString(),
+                        txtUserMovil.getText().toString(),
+                        txtUserDni.getText().toString(),
+                        txtUserName.getText().toString(),
+                        mBitmap, txtUserPass.getText().toString());
+            }
+            RegisterTask registerTask = new RegisterTask(u, txtUserPass.getText().toString(), RegisterActivity.this, mEdit);
             registerTask.execute();
         }
     }

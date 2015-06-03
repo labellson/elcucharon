@@ -37,5 +37,6 @@
     <string name="title_activity_list_reservas">Mis Reservas</string>
     <string name="cancelar_reserva">¿Cancelar la reserva?</string>
     <string name="title_activity_map">Ubicación del Restaurante</string>
+    <string name="btn_delete_user">Borrar cuenta</string>
 
 </resources>

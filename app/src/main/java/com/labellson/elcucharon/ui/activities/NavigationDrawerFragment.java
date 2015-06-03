@@ -108,6 +108,14 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mDrawerList.setLayoutManager(layoutManager);
             mDrawerList.setHasFixedSize(true);
+            view.findViewById(R.id.navigationHeader).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                    intent.putExtra("EDIT", true);
+                    startActivity(intent);
+                }
+            });
 
             final List<NavigationItem> navigationItems = getMenu();
             NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);

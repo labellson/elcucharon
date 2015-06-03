@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
@@ -37,6 +38,25 @@ public class RequestJson {
             get.setHeaders(getHeaders(headers));
 
             HttpResponse resp = httpClient.execute(get);
+            return EntityUtils.toString(resp.getEntity());
+        }finally {
+            httpClient.close();
+        }
+    }
+
+    private static String reqPutJSON(String uri, String json, Map<String, String> headers) throws IOException {
+        final AndroidHttpClient httpClient = AndroidHttpClient.newInstance("Android");
+        try {
+            final HttpPut put = new HttpPut(uri);
+
+            //Añadir la entidad JSON
+            StringEntity se = new StringEntity(json);
+            put.setEntity(se);
+
+            //Añadimos los headers
+            put.setHeaders(getHeaders(headers));
+
+            HttpResponse resp = httpClient.execute(put);
             return EntityUtils.toString(resp.getEntity());
         }finally {
             httpClient.close();
@@ -128,6 +148,10 @@ public class RequestJson {
 
     public static JSONObject reqGetJSONObject(String uri, Map<String, String> headers) throws IOException, JSONException {
         return new JSONObject(reqGetJSON(uri, headers));
+    }
+
+    public static JSONObject reqPutJSONObject(String uri, JSONObject jObj, Map<String, String> headers) throws IOException, JSONException {
+        return new JSONObject(reqPutJSON(uri, jObj.toString(), headers));
     }
 
     /**

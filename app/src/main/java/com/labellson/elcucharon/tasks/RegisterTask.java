@@ -19,17 +19,20 @@ import java.io.IOException;
 /**
  * Created by dani on 28/05/15.
  */
+//Tambien se usa para editar un usuario
 public class RegisterTask extends AsyncTask<Void, Void, JSONObject> {
 
     private Context context;
     private User user;
     private ProgressDialog pDialog;
     private String pass;
+    private boolean edit;
 
-    public RegisterTask(User user, String pass, Context context){
+    public RegisterTask(User user, String pass, Context context, boolean edit){
         this.user = user;
         this.context = context;
         this.pass = pass;
+        this.edit = edit;
         pDialog = new ProgressDialog(context);
         pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pDialog.setMessage("Cargando...");
@@ -40,7 +43,11 @@ public class RegisterTask extends AsyncTask<Void, Void, JSONObject> {
     @Override
     protected JSONObject doInBackground(Void... params) {
         try {
-            return CucharonRestApi.registerUser(user, pass);
+            if(edit){
+                return CucharonRestApi.editUser(user, pass);
+            }else {
+                return CucharonRestApi.registerUser(user, pass);
+            }
         } catch (JSONException e) {
             Log.e("JSONException", "RegisterTask", e);
             return null;
